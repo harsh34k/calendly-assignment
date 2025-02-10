@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createBooking } from "@/actions/bookings";
+import Script from "next/script";
 import "react-day-picker/style.css";
 
 export default function BookingForm({ event, availability }) {
@@ -18,8 +19,7 @@ export default function BookingForm({ event, availability }) {
   const [loading, setLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(null);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const handlePayment = async () => {
     if (!selectedDate || !selectedTime) {
       console.error("Date or time not selected");
       return;
@@ -40,13 +40,42 @@ export default function BookingForm({ event, availability }) {
       endTime: endTime.toISOString(),
       additionalInfo,
     };
-    console.log("bookingData", bookingData);
 
     try {
-      const response = await createBooking(bookingData);
-      setBookingSuccess(response);
+      // Call backend to create a Razorpay order
+      const res = await fetch("/api/create-order", {
+        method: "POST",
+        body: JSON.stringify({ amount: event.price * 100 }), // Amount in paisa
+      });
+
+      const order = await res.json();
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: event.title,
+        description: `Booking for ${event.title}`,
+        order_id: order.id,
+        handler: async function (response) {
+          console.log("Payment Successful", response);
+          // Proceed with booking after successful payment
+          const bookingResponse = await createBooking(bookingData);
+          setBookingSuccess(bookingResponse);
+        },
+        prefill: {
+          name,
+          email,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (error) {
-      console.error("Booking failed:", error);
+      console.error("Payment failed:", error);
     } finally {
       setLoading(false);
     }
@@ -62,7 +91,9 @@ export default function BookingForm({ event, availability }) {
 
   if (bookingSuccess) {
     return (
+
       <div className="text-center p-10 border bg-white">
+
         <h2 className="text-2xl font-bold mb-4">Booking successful!</h2>
         {bookingSuccess.meetLink && (
           <p>
@@ -83,6 +114,10 @@ export default function BookingForm({ event, availability }) {
 
   return (
     <div className="flex flex-col gap-8 p-10 border bg-white">
+      <Script
+        type="text/javascript"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
       <div className="md:h-96 flex flex-col md:flex-row gap-5">
         <div className="w-full">
           <DayPicker
@@ -90,7 +125,7 @@ export default function BookingForm({ event, availability }) {
             selected={selectedDate}
             onSelect={(date) => {
               setSelectedDate(date);
-              setSelectedTime(null); // Reset selected time when date changes
+              setSelectedTime(null);
             }}
             disabled={[{ before: new Date() }]}
             modifiers={{ available: availableDays }}
@@ -124,7 +159,7 @@ export default function BookingForm({ event, availability }) {
         </div>
       </div>
       {selectedTime && (
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
           <div>
             <Input
               value={name}
@@ -147,8 +182,8 @@ export default function BookingForm({ event, availability }) {
               placeholder="Additional Information"
             />
           </div>
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Scheduling..." : "Schedule Event"}
+          <Button type="button" onClick={handlePayment} disabled={loading} className="w-full">
+            {loading ? "Processing..." : `Pay ₹${event.price} & Book`}
           </Button>
         </form>
       )}

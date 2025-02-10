@@ -22,8 +22,9 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function EventBookingPage({ params }) {
-  const event = await getEventDetails(params.username, params.eventId);
-  const availability = await getEventAvailability(params.eventId);
+  const { username, eventId } = await params;
+  const event = await getEventDetails(username, eventId);
+  const availability = await getEventAvailability(eventId);
 
   if (!event) {
     notFound();
