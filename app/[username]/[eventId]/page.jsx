@@ -7,7 +7,8 @@ import EventDetails from "./_components/event-details";
 import BookingForm from "./_components/booking-form";
 
 export async function generateMetadata({ params }) {
-  const event = await getEventDetails(params.username, params.eventId);
+  const { username, eventId } = await params;
+  const event = await getEventDetails(username, eventId);
 
   if (!event) {
     return {

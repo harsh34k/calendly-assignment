@@ -24,14 +24,14 @@ export async function generateMetadata({ params }) {
 
 export default async function UserProfilePage({ params }) {
     const { username } = await params;
-    console.log("username", typeof (username));
+    //console.log("username", typeof (username));
 
 
     const user = await getUserByUsername(username);
-    console.log("yha tk to aagya");
-    console.log("user y hai", user);
+    //console.log("yha tk to aagya");
+    //console.log("user y hai", user);
 
-    // console.log("yha tk to aagya");
+    // //console.log("yha tk to aagya");
 
 
     if (!user) {

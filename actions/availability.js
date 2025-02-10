@@ -10,7 +10,6 @@ import {
   isBefore,
   addMinutes,
 } from "date-fns";
-import { log } from "util";
 
 export async function getUserAvailability() {
   const user2 = await currentUser()
@@ -28,7 +27,6 @@ export async function getUserAvailability() {
     return null;
   }
 
-  // Transform the availability data into the format expected by the form
   const availabilityData = { timeGap: user.availability.timeGap };
 
   [
@@ -58,93 +56,11 @@ export async function getUserAvailability() {
   return availabilityData;
 }
 
-// export async function updateAvailability(data) {
-//   const user2 = await currentUser()
-//   console.log("data", data);
 
-
-//   if (!user2) {
-//     throw new Error("Unauthorized");
-//   }
-
-//   const user = await db.user.findUnique({
-//     where: { clerkUserId: user2.id },
-//     include: { availability: true },
-//   });
-//   console.log("user", user);
-
-
-//   if (!user) {
-//     throw new Error("User not found");
-//   }
-
-//   // const availabilityData = Object.entries(data)
-//   const availabilityData = Object.entries(data).flatMap(
-//     ([day, { isAvailable, startTime, endTime }]) => {
-//       if (isAvailable) {
-//         const baseDate = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format
-
-//         return [
-//           {
-//             day: day.toUpperCase(),
-//             startTime: new Date(`${baseDate}T${startTime}:00Z`),
-//             endTime: new Date(`${baseDate}T${endTime}:00Z`),
-//           },
-//         ];
-//       }
-//       return [];
-//     }
-//   );
-//   console.log("availabilityData", availabilityData);
-
-
-//   if (user?.availability && user.availability !== null) {
-//     console.log("i am here 2");
-//     console.log("user", user);
-
-
-//     const result = await db.availability.update({
-//       where: { id: user.availability.id },
-//       data: {
-//         timeGap: data.timeGap,
-//         days: {
-//           deleteMany: {},
-//           create: availabilityData,
-//         },
-//       },
-//     });
-//     console.log("result", result);
-
-
-//     // console.log("erorstack", someError.stack);
-//     // await db?.availability?.update({
-//     //   where: { id: user.availability.id }
-//     // })
-
-//   } else {
-//     console.log("i am here", data);
-
-//     const result23 = await db.availability.create({
-//       data: {
-//         userId: user.id,
-//         timeGap: data.timeGap,
-//         days: {
-//           create: availabilityData,
-//         },
-//       },
-//     });
-//     console.log("result", result23);
-//     console.log("hello yar", db.availability);
-//   }
-
-
-
-//   return { success: true };
-// }
 export async function updateAvailability(data) {
   try {
     const user2 = await currentUser();
-    console.log("data", data);
+    // //console.log("data", data);
 
     if (!user2) {
       throw new Error("Unauthorized");
@@ -154,7 +70,7 @@ export async function updateAvailability(data) {
       where: { clerkUserId: user2.id },
       include: { availability: true },
     });
-    console.log("user", user);
+    // //console.log("user", user);
 
     if (!user) {
       throw new Error("User not found");
@@ -176,11 +92,11 @@ export async function updateAvailability(data) {
         return [];
       }
     );
-    console.log("availabilityData", availabilityData);
+    //console.log("availabilityData", availabilityData);
 
     if (user?.availability) {
-      console.log("i am here 2");
-      console.log("user", user);
+      //console.log("i am here 2");
+      //console.log("user", user);
 
       const result = await db.availability.update({
         where: { id: user.availability.id },
@@ -192,9 +108,9 @@ export async function updateAvailability(data) {
           },
         },
       });
-      console.log("result", result);
+      //console.log("result", result);
     } else {
-      console.log("i am here", data);
+      //console.log("i am here", data);
 
       const result23 = await db.availability.create({
         data: {
@@ -205,7 +121,7 @@ export async function updateAvailability(data) {
           },
         },
       });
-      console.log("result", result23);
+      //console.log("result", result23);
     }
 
     return { success: true };

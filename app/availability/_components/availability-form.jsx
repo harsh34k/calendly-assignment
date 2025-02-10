@@ -18,7 +18,7 @@ export default function AvailabilityForm({ initialData }) {
   const [formData, setFormData] = useState(initialData);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast(); // Initialize toast notifications
-  console.log("initialData", initialData);
+  //console.log("initialData", initialData);
 
 
   const handleCheckboxChange = (day) => {
@@ -49,7 +49,7 @@ export default function AvailabilityForm({ initialData }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("formData", formData);
+    //console.log("formData", formData);
 
 
     // Validation: Check if all available days have valid time slots
@@ -70,10 +70,10 @@ export default function AvailabilityForm({ initialData }) {
     }
 
     try {
-      console.log("abhi yhi hu");
+      //console.log("abhi yhi hu");
 
       await updateAvailability(formData); // Call API function
-      console.log("yha tk phoch gye");
+      //console.log("yha tk phoch gye");
 
 
       toast({

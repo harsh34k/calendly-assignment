@@ -58,7 +58,7 @@ export default function BookingForm({ event, availability }) {
         description: `Booking for ${event.title}`,
         order_id: order.id,
         handler: async function (response) {
-          console.log("Payment Successful", response);
+          //console.log("Payment Successful", response);
           // Proceed with booking after successful payment
           const bookingResponse = await createBooking(bookingData);
           setBookingSuccess(bookingResponse);

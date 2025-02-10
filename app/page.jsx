@@ -5,11 +5,12 @@ import { Button } from "../components/ui/button";
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import EventDialog from "../components/EventDialog";
 import Link from "next/link";
+import UserMenu from "../components/user-menu"
 
 export default function Home() {
   const [open, setOpen] = useState(false);
   const { user, isSignedIn } = useUser(); // Fetch user details from Clerk
-  console.log("user", user);
+  //console.log("user", user);
 
 
   const people = [
@@ -33,7 +34,7 @@ export default function Home() {
           </SignInButton>
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <UserMenu />
         </SignedIn>
       </div>
 
