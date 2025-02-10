@@ -15,8 +15,8 @@ export default function Home() {
 
   const people = [
     {
-      name: isSignedIn ? user.fullName : "Unknown User",
-      image: isSignedIn ? user?.imageUrl : "https://via.placeholder.com/80",
+      name: "Harsh Kumar",
+      image: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yc3FFYkdpRGFwdVVpbDUxNndLNEJpY3pnbjIifQ?width=80",
       username: isSignedIn ? user?.username || "unknown-user" : "unknown-user",
     },
     { name: "Michael Smith", image: "https://randomuser.me/api/portraits/men/2.jpg" },
@@ -34,6 +34,9 @@ export default function Home() {
           </SignInButton>
         </SignedOut>
         <SignedIn>
+          <Link href={"/availability"}>
+            <Button variant="outline">Set Availability</Button>
+          </Link>
           <UserMenu />
         </SignedIn>
       </div>
@@ -43,6 +46,7 @@ export default function Home() {
         <div className="flex items-center justify-center gap-4">
           {people.map((person, index) => (
             <Link href={`/Harsh-KumarM7Zn`} key={index}>
+              {/*  */}
               <div className="flex flex-col items-center">
                 <img
                   src={person.image}

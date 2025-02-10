@@ -142,7 +142,7 @@ export default function AvailabilityForm({ initialData }) {
         )
       )}
 
-      <div className="flex items-center space-x-4">
+      {/* <div className="flex items-center space-x-4">
         <span className="w-48">Minimum gap before booking (minutes):</span>
         <Input
           type="number"
@@ -151,7 +151,7 @@ export default function AvailabilityForm({ initialData }) {
           onChange={handleInputChange}
           className="w-32"
         />
-      </div>
+      </div> */}
 
       <Button type="submit" disabled={loading}>
         {loading ? "Updating..." : "Update Availability"}

@@ -35,7 +35,8 @@ export async function getUserEvents() {
 
     const user2 = await currentUser()
     const user = await db.user.findUnique({
-        where: { clerkUserId: user2.id },
+        where: { clerkUserId: "user_2sqEbFrmD0unPBn7tgxNFfxM7Zn" },
+        // 
     });
 
     if (!user) {
